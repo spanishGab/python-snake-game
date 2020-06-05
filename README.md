@@ -27,7 +27,7 @@ I also made some modifications in the game, such as:
 * Creation of the score marking;
 * Creation of a score register (using a simple .txt file).
 
-This is actually not the repository I originally worked in this game, to see the developing process, take a look at my [deprecated repository](https://github.com/GabrielEspanholSantos/hunter-sDungeon)
+> This is actually not the repository I originally worked in this game, to see the developing process, take a look at my [deprecated repository](https://github.com/GabrielEspanholSantos/hunter-sDungeon)
 
 
 ## How to play 
