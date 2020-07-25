@@ -1,17 +1,19 @@
 import pygame, random
 from pygame.locals import *
+from config import *
 import os
+import Snake
 dir_name = os.path.join(os.path.dirname(__file__))
 
-UP = 0
-RIGHT = 1
-DOWN = 2
-LEFT = 3
+# UP = 0
+# RIGHT = 1
+# DOWN = 2
+# LEFT = 3
 
 pygame.init()
-screen = pygame.display.set_mode((600,600))
+# screen = pygame.display.set_mode((600,600))
 pygame.display.set_caption('Snake')
-clock = pygame.time.Clock()
+# clock = pygame.time.Clock()
 
 def on_grid_random():
     x = random.randint(10,580)
@@ -43,13 +45,7 @@ def set_direction(my_direction, snake):
 
 
 def make_game(best_score):
-    snake = [(200, 200), (210, 200), (220,200)]
-
-    snake_head_skin = pygame.Surface((10,10))
-    snake_head_skin.fill((51, 102, 255))
-
-    snake_body_skin = pygame.Surface((10,10))
-    snake_body_skin.fill((51, 153, 255))
+    snake = Snake.Snake(head=(200, 200), mid=(210, 200), tail=(220,200), head_color=(255, 102, 0), body_color=(255, 153, 3))
 
     apple_pos = on_grid_random()
     apple = pygame.Surface((10,10))
@@ -58,12 +54,10 @@ def make_game(best_score):
     my_direction = LEFT
     font = pygame.font.Font('freesansbold.ttf', 18)
     score = 0
-    snake_speed = 10
-    snake_size = len(snake)
     dead_line = False
 
     while True:
-        clock.tick(snake_speed)
+        clock.tick(snake.get_speed())
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.display.quit()
@@ -85,23 +79,18 @@ def make_game(best_score):
                     break
 
 
-        if collision(snake[0], apple_pos):
+        if collision(snake.get_snake()[0], apple_pos):
             apple_pos = on_grid_random()
-            snake.append((0,0))
-            snake_size = len(snake)
-            snake_speed = alter_snake_speed(snake_size, snake_speed)
+            snake.increase_size()
             score += 1
 
+        snake.update_location(my_direction)
 
-        for i in range(len(snake) - 1, 0, -1):
-            snake[i] = (snake[i-1][0], snake[i-1][1])
-
-        snake[0] = set_direction(my_direction, snake)
-
-        if list(filter(lambda part: collision(snake[0], part), snake[1:-1])):
+        if list(filter(lambda part: collision(snake.get_snake()[0], part), snake.get_snake()[1:-1])):
             dead_line = True
         
-        if snake[0][0] == 600 or snake[0][1] == 600 or snake[0][0] == 0 or snake[0][1] == 0:
+        if (snake.get_snake()[0][0] == 600 or snake.get_snake()[0][1] == 600 or 
+            snake.get_snake()[0][0] == 0 or snake.get_snake()[0][1] == 0):
             dead_line = True
 
         screen.fill((51, 204, 51))
@@ -117,11 +106,7 @@ def make_game(best_score):
         b_score_rect.topleft = (40, 10)
         screen.blit(b_score_font, b_score_rect)
 
-        for i, pos in enumerate(snake):
-            if i == 0:
-                screen.blit(snake_head_skin,pos)
-            else:
-                screen.blit(snake_body_skin,pos)
+        snake.print_snake(screen)
         
         if dead_line:
             if score > best_score:
