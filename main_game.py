@@ -11,6 +11,8 @@ dir_name = os.path.join(os.path.dirname(__file__))
 # LEFT = 3
 
 pygame.init()
+pygame.mixer.pre_init(44100, -16, 2, 2)
+pygame.mixer.init()
 # screen = pygame.display.set_mode((600,600))
 pygame.display.set_caption('Snake')
 # clock = pygame.time.Clock()
@@ -23,25 +25,6 @@ def on_grid_random():
 
 def collision(c1, c2):
     return (c1[0] == c2[0]) and (c1[1] == c2[1])
-
-
-def alter_snake_speed(size, speed):
-    if size % 8 == 0:
-        speed = speed + 1
-    return speed   
-
-
-def set_direction(my_direction, snake):
-    if my_direction == UP:
-        snake[0] = (snake[0][0], snake[0][1] - 10)
-    if my_direction == DOWN:
-        snake[0] = (snake[0][0], snake[0][1] + 10)
-    if my_direction == RIGHT:
-        snake[0] = (snake[0][0] + 10, snake[0][1])
-    if my_direction == LEFT:
-        snake[0] = (snake[0][0] - 10, snake[0][1])
-    
-    return snake[0]
 
 
 def make_game(best_score):
@@ -80,6 +63,7 @@ def make_game(best_score):
 
 
         if collision(snake.get_snake()[0], apple_pos):
+            pygame.mixer.Sound.play(pygame.mixer.Sound("carrot.ogg"))
             apple_pos = on_grid_random()
             snake.increase_size()
             score += 1
