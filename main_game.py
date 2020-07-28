@@ -2,37 +2,24 @@ import pygame, random
 from pygame.locals import *
 from config import *
 import os
-import Snake
+from Snake import Snake
+from Apple import Apple
 dir_name = os.path.join(os.path.dirname(__file__))
 
-# UP = 0
-# RIGHT = 1
-# DOWN = 2
-# LEFT = 3
 
 pygame.init()
 pygame.mixer.pre_init(44100, -16, 2, 2)
 pygame.mixer.init()
-# screen = pygame.display.set_mode((600,600))
 pygame.display.set_caption('Snake')
-# clock = pygame.time.Clock()
-
-def on_grid_random():
-    x = random.randint(10,580)
-    y = random.randint(10,580)
-    return (x//10 * 10, y//10 * 10)
-
 
 def collision(c1, c2):
     return (c1[0] == c2[0]) and (c1[1] == c2[1])
 
 
 def make_game(best_score):
-    snake = Snake.Snake(head=(200, 200), mid=(210, 200), tail=(220,200), head_color=(255, 102, 0), body_color=(255, 153, 3))
+    snake = Snake(head=(200, 200), mid=(210, 200), tail=(220,200), head_color=(255, 102, 0), body_color=(255, 153, 3))
 
-    apple_pos = on_grid_random()
-    apple = pygame.Surface((10,10))
-    apple.fill((255,0,0))
+    apple = Apple()
 
     my_direction = LEFT
     font = pygame.font.Font('freesansbold.ttf', 18)
@@ -61,24 +48,23 @@ def make_game(best_score):
                     my_direction = RIGHT
                     break
 
-
-        if collision(snake.get_snake()[0], apple_pos):
+        if collision(snake.get_snake()[0], apple.get_apple_pos()):
             pygame.mixer.Sound.play(pygame.mixer.Sound("carrot.ogg"))
-            apple_pos = on_grid_random()
+            apple.create()
             snake.increase_size()
             score += 1
 
         snake.update_location(my_direction)
 
-        if list(filter(lambda part: collision(snake.get_snake()[0], part), snake.get_snake()[1:-1])):
+        snake_head = snake.get_snake()[0]
+        if list(filter(lambda part: collision(snake_head, part), snake.get_snake()[1:])):
             dead_line = True
         
-        if (snake.get_snake()[0][0] == 600 or snake.get_snake()[0][1] == 600 or 
-            snake.get_snake()[0][0] == 0 or snake.get_snake()[0][1] == 0):
+        if ((snake_head[0] == 600 or snake_head[1] == 600) or (snake_head[0] == 0 or snake_head[1] == 0)):
             dead_line = True
 
         screen.fill((51, 204, 51))
-        screen.blit(apple, apple_pos)
+        screen.blit(apple.get_apple(), apple.get_apple_pos())
 
         score_font = font.render(f'Score: {score}', True, (255, 255, 255))
         score_rect = score_font.get_rect()
@@ -125,6 +111,7 @@ def draw_menu():
             best_score = int(r.readline())
         except:
             best_score = -1
+    
 
     while True:
         if i == 3:
@@ -144,6 +131,7 @@ def draw_menu():
                     enter = True
         
         screen.fill((0, 0, 0))
+        pygame.draw.polygon(screen, (204, 0, 102), ((200, 170), (200, 185), (215, 178)))
 
         font_colors = ((255, 255, 255), (204, 0, 102), (0, 255, 255))
         if direction == UP:
@@ -165,7 +153,7 @@ def draw_menu():
                 exit()
                 
                 
-        snake_font = pygame.font.SysFont('consolas', 40)
+        snake_font = pygame.font.SysFont('Pixeled', 30)
         snake_font_screen = snake_font.render('Snake Game', True, font_colors[i])
         snake_font_area = snake_font_screen.get_rect()
         snake_font_area.midtop = ((600 // 2)- 5 + (i*10), 60 - (i*10))

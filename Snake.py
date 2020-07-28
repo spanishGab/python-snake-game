@@ -2,18 +2,22 @@ import pygame as pyg
 from config import UP, DOWN, LEFT, RIGHT
 
 class Snake():
-    _speed = 10
-    _snake = []
 
-    def __init__(self, head, mid, tail, dimensions=(10,10), head_color=(51, 102, 255), body_color=(51, 153, 255)):
+    def __init__(self, head, mid, tail, dimensions=(10,10), head_color=(51, 102, 255), body_color=(51, 153, 255), speed=10):
         self.head = head
         self.mid = mid
         self.tail = tail
+
         self._head_skin = pyg.Surface(dimensions)
         self._body_skin = pyg.Surface(dimensions)
+        self.set_skin(head_color, body_color)
+        
+        self._snake = [head, mid, tail]
+        self._speed = speed
+
+    def set_skin(self, head_color, body_color):
         self._head_skin.fill(head_color)
         self._body_skin.fill(body_color)
-        self._snake = [head, mid, tail]
 
     def get_snake(self):
         return self._snake
@@ -22,12 +26,10 @@ class Snake():
         return self._speed
     
     def set_speed(self):
-        if self.get_size() % 8 == 0:
-            self._speed += 1
+        self._speed += 1
 
     def get_size(self):
         return len(self._snake)
-
 
     def set_direction(self, direction):
         if direction == UP:
@@ -47,8 +49,9 @@ class Snake():
         
     def increase_size(self):
         self._snake.append((0,0))
-        self.set_speed()
-
+        
+        if self.get_size() % 8 == 0:
+            self.set_speed()
 
     def print_snake(self, screen):
         screen.blit(self._head_skin, self._snake[0])
