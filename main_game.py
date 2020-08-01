@@ -4,6 +4,7 @@ from config import *
 import os
 from Snake import Snake
 from Apple import Apple
+from Fonts import Fonts
 dir_name = os.path.join(os.path.dirname(__file__))
 
 
@@ -14,6 +15,38 @@ pygame.display.set_caption('Snake')
 
 def collision(c1, c2):
     return (c1[0] == c2[0]) and (c1[1] == c2[1])
+
+
+def print_snake(screen, font_color, snake_font, i):
+    snake_font_screen = snake_font.render('Snake Game', True, font_color)
+    snake_font_area = snake_font_screen.get_rect()
+    snake_font_area.midtop = ((600 // 2)- 5 + (i*10), 60 - (i*10))
+    screen.blit(snake_font_screen, snake_font_area)
+
+
+def create_font(text, style, size, pos):
+    font = Fonts(text, style, size)
+    font.set_type()
+    font.set_render()
+    font.set_area()
+    font.set_location(mid=pos[0], top=pos[1])
+    return font
+
+
+def alter_font_color(font, color):
+    font.set_color(color)
+    font.set_render()
+    return font
+
+
+def switch_title(font, color, pos=None):
+    font.set_color(color)
+    font.set_render()
+    
+    if pos:
+        font.set_location(mid=pos[0], top=pos[1])
+
+    return font
 
 
 def make_game(best_score):
@@ -65,6 +98,7 @@ def make_game(best_score):
 
         screen.fill((51, 204, 51))
         screen.blit(apple.get_apple(), apple.get_apple_pos())
+        # pygame.draw.circle(screen, apple.get_color(), apple.get_apple_pos(), 5)  #TODO: apple circle
 
         score_font = font.render(f'Score: {score}', True, (255, 255, 255))
         score_rect = score_font.get_rect()
@@ -101,10 +135,14 @@ def draw_menu():
     clock.tick(10)
     direction = UP
     enter = False
-    font = pygame.font.SysFont('consolas', 30)
+    
+    play_font = create_font('PLAY', 'Pixeled', 15, ((600 // 2), 160))
+    quit_font = create_font('QUIT', 'Pixeled', 15, ((600 // 2), 190))
+    title_font = create_font('Snake Game', 'Pixeled', 30, (((600 // 2)-5)+10, 50))
     i = 0
-    current_play_color = (255,255,255)
-    current_quit_color = (255,255,255)
+    
+    colors = ((0,0,0), (255, 255, 255), (0, 204, 204), (204, 0, 102))
+    pointer_colors = ((0, 255, 255), (0,0,0))
 
     with open(os.path.join(dir_name, 'best_score.txt'), 'r') as r:
         try:
@@ -114,8 +152,7 @@ def draw_menu():
     
 
     while True:
-        if i == 3:
-            i = 0
+        changed = False
         for event in pygame.event.get():
             if event.type == QUIT:
                 pygame.display.quit()
@@ -124,19 +161,20 @@ def draw_menu():
 
             if event.type == KEYDOWN:
                 if event.key == K_UP:
+                    changed = True
                     direction = UP
                 if event.key == K_DOWN:
+                    changed = True
                     direction = DOWN
                 if event.key == K_RETURN or event.key == K_KP_ENTER:
                     enter = True
         
-        screen.fill((0, 0, 0))
-        pygame.draw.polygon(screen, (204, 0, 102), ((200, 170), (200, 185), (215, 178)))
+        screen.fill(colors[0])
 
-        font_colors = ((255, 255, 255), (204, 0, 102), (0, 255, 255))
         if direction == UP:
-            current_play_color = font_colors[2]
-            current_quit_color = font_colors[0]
+            current_play_color = colors[3]
+            current_quit_color = colors[1]
+            pointer_direction = (255, 183)
             if enter:
                 screen.fill((51, 204, 51))
                 pygame.display.update()
@@ -145,36 +183,48 @@ def draw_menu():
                 break
 
         elif direction == DOWN:
-            current_play_color = font_colors[0]
-            current_quit_color = font_colors[2]
+            current_play_color = colors[1]
+            current_quit_color = colors[3]
+            pointer_direction = (255, 213)
             if enter:
                 pygame.display.quit()
                 pygame.quit()
                 exit()
                 
-                
-        snake_font = pygame.font.SysFont('Pixeled', 30)
-        snake_font_screen = snake_font.render('Snake Game', True, font_colors[i])
-        snake_font_area = snake_font_screen.get_rect()
-        snake_font_area.midtop = ((600 // 2)- 5 + (i*10), 60 - (i*10))
-        screen.blit(snake_font_screen, snake_font_area)
+        pygame.draw.circle(screen, pointer_colors[i%2], pointer_direction, 4)
 
-        play_font = font.render('Play', True, current_play_color)
-        play_area = play_font.get_rect()
-        play_area.midtop = (600 // 2, 170)
-        screen.blit(play_font, play_area)
+        if i == 0: # TODO: verify the pattern to simplify this code
+            pass
+        elif i == 1:
+            font = switch_title(title_font, colors[i], (((600 // 2)-5)+10, 50))
+            font.print_font(screen)
+        elif i == 2:
+            font = switch_title(title_font, colors[i-1], (((600 // 2)-5)+10, 50))
+            font.print_font(screen)
+            font = switch_title(title_font, colors[i], ((600 // 2)- 5 + (i*10), 60 - (i*10)))
+            font.print_font(screen)
+        elif i == 3:
+            switch_title(title_font, colors[i-2], (((600 // 2)-5)+10, 50))
+            font.print_font(screen)
+            switch_title(title_font, colors[i-1], ((600 // 2)- 5 + ((i-1)*10), 60 - ((i-1)*10)))
+            font.print_font(screen)
+            switch_title(title_font, colors[i], ((600 // 2)- 5 + (i*10), 60 - (i*10)))
+            font.print_font(screen)
+            
 
-        quit_font = font.render('Quit', True, current_quit_color)
-        quit_area = quit_font.get_rect()
-        quit_area.midtop = (600 // 2, 200)
-        screen.blit(quit_font, quit_area)
+        alter_font_color(play_font, current_play_color)
+        play_font.print_font(screen)
 
+        alter_font_color(quit_font, current_quit_color)
+        quit_font.print_font(screen)
 
-        pygame.time.wait(250)
+        if not changed:
+            pygame.time.wait(300)
+            
         pygame.display.update()
 
-
-        i += 1
+        i = (i + 1) % 4
+        
 
 draw_menu()
 
