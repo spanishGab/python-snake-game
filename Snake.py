@@ -1,5 +1,5 @@
 import pygame as pyg
-from config import UP, DOWN, LEFT, RIGHT
+from GameConfig.config import UP, DOWN, LEFT, RIGHT
 
 class Snake():
 

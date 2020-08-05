@@ -1,55 +1,24 @@
-import pygame, random
-from pygame.locals import *
-from config import *
 import os
-from Snake import Snake
-from Apple import Apple
-from Fonts import Fonts
 dir_name = os.path.join(os.path.dirname(__file__))
 
+import pygame
+import random
+from pygame.locals import *
+
+from Snake import Snake
+from Apple import Apple
+from GameConfig.config import *
 
 pygame.init()
 pygame.mixer.pre_init(44100, -16, 2, 2)
 pygame.mixer.init()
 pygame.display.set_caption('Snake')
 
-def collision(c1, c2):
-    return (c1[0] == c2[0]) and (c1[1] == c2[1])
-
-
-def print_snake(screen, font_color, snake_font, i):
-    snake_font_screen = snake_font.render('Snake Game', True, font_color)
-    snake_font_area = snake_font_screen.get_rect()
-    snake_font_area.midtop = ((600 // 2)- 5 + (i*10), 60 - (i*10))
-    screen.blit(snake_font_screen, snake_font_area)
-
-
-def create_font(text, style, size, pos):
-    font = Fonts(text, style, size)
-    font.set_type()
-    font.set_render()
-    font.set_area()
-    font.set_location(mid=pos[0], top=pos[1])
-    return font
-
-
-def alter_font_color(font, color):
-    font.set_color(color)
-    font.set_render()
-    return font
-
-
-def switch_title(font, color, pos=None):
-    font.set_color(color)
-    font.set_render()
-    
-    if pos:
-        font.set_location(mid=pos[0], top=pos[1])
-
-    return font
-
 
 def make_game(best_score):
+    pygame.mixer.music.load('GameSounds/happy-cave.ogg')
+    pygame.mixer.music.play(-1)  # TODO Make the music stop when game ends
+
     snake = Snake(head=(200, 200), mid=(210, 200), tail=(220,200), head_color=(255, 102, 0), body_color=(255, 153, 3))
 
     apple = Apple()
@@ -68,21 +37,21 @@ def make_game(best_score):
                 exit()
 
             if event.type == KEYDOWN:
-                if event.key == K_UP and my_direction != DOWN:
+                if (event.key == K_UP or event.key == K_KP8) and my_direction != DOWN:
                     my_direction = UP
                     break
-                elif event.key == K_DOWN and my_direction != UP:
+                elif (event.key == K_DOWN or event.key == K_KP2) and my_direction != UP:
                     my_direction = DOWN
                     break
-                elif event.key == K_LEFT and my_direction != RIGHT:
+                elif (event.key == K_LEFT or event.key == K_KP4) and my_direction != RIGHT:
                     my_direction = LEFT
                     break
-                elif event.key == K_RIGHT and my_direction != LEFT:
+                elif (event.key == K_RIGHT or event.key == K_KP6) and my_direction != LEFT:
                     my_direction = RIGHT
                     break
 
         if collision(snake.get_snake()[0], apple.get_apple_pos()):
-            pygame.mixer.Sound.play(pygame.mixer.Sound("carrot.ogg"))
+            pygame.mixer.Sound.play(pygame.mixer.Sound("GameSounds/carrot.ogg"))
             apple.create()
             snake.increase_size()
             score += 1

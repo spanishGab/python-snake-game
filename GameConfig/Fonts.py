@@ -1,6 +1,6 @@
 import pygame as pyg
 from pygame.locals import *
-from config import UP, DOWN
+from GameConfig.config import UP, DOWN
 
 class Fonts():
 
