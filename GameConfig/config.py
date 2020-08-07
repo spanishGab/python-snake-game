@@ -23,21 +23,6 @@ def print_snake(screen, font_color, snake_font, i):
     screen.blit(snake_font_screen, snake_font_area)
 
 
-def create_font(text, style, size, pos):
-    font = Fonts(text, style, size)
-    font.set_type()
-    font.set_render()
-    font.set_area()
-    font.set_location(mid=pos[0], top=pos[1])
-    return font
-
-
-def alter_font_color(font, color):
-    font.set_color(color)
-    font.set_render()
-    return font
-
-
 def switch_title(font, color, pos=None):
     font.set_color(color)
     font.set_render()

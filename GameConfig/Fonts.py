@@ -4,12 +4,15 @@ from GameConfig.config import UP, DOWN
 
 class Fonts():
 
-    def __init__(self, text, style, size, color=(255,255,255)):
+    def __init__(self, text, style, size, pos, color=(255,255,255)):
         self.set_style(style)
         self.set_size(size)
         self.set_text(text)
         self.set_color(color)
-
+        self.set_type()
+        self.set_render()
+        self.set_area()
+        self.set_location(mid=pos[0], top=pos[1])
 
     def set_text(self, text):
         self._text = str(text)
@@ -57,6 +60,10 @@ class Fonts():
     
     def print_font(self, screen):
         screen.blit(self._font_render, self._font_area)
+
+    def alter_color(self, color):
+        self.set_color(color)
+        self.set_render()
 
     
         

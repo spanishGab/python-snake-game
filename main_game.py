@@ -2,7 +2,6 @@ import os
 dir_name = os.path.join(os.path.dirname(__file__))
 
 import pygame
-import random
 from pygame.locals import *
 
 from Snake import Snake
@@ -15,9 +14,10 @@ pygame.mixer.init()
 pygame.display.set_caption('Snake')
 
 
-def make_game(best_score):
+def play_game(best_score):
+    pygame.time.wait(200)
     pygame.mixer.music.load('GameSounds/happy-cave.ogg')
-    pygame.mixer.music.play(-1)  # TODO Make the music stop when game ends
+    pygame.mixer.music.play(-1)
 
     snake = Snake(head=(200, 200), mid=(210, 200), tail=(220,200), head_color=(255, 102, 0), body_color=(255, 153, 3))
 
@@ -85,115 +85,16 @@ def make_game(best_score):
             if score > best_score:
                 with open(os.path.join(dir_name, 'best_score.txt'), 'w') as r:
                     r.write(str(score))
+            pygame.mixer.music.stop()
             break
 
         pygame.display.update()
 
-    while True:
-        game_over_font = pygame.font.Font('freesansbold.ttf', 50)
-        game_over_screen = game_over_font.render('Game Over', True, (255, 255, 255))
-        game_over_rect = game_over_screen.get_rect()
-        game_over_rect.midtop = (600 // 2, 20)
-        screen.blit(game_over_screen, game_over_rect)
-        pygame.display.update()
-        pygame.time.wait(60)
-        draw_menu()
-
-
-def draw_menu():
-    clock.tick(10)
-    direction = UP
-    enter = False
     
-    play_font = create_font('PLAY', 'Pixeled', 15, ((600 // 2), 160))
-    quit_font = create_font('QUIT', 'Pixeled', 15, ((600 // 2), 190))
-    title_font = create_font('Snake Game', 'Pixeled', 30, (((600 // 2)-5)+10, 50))
-    i = 0
-    
-    colors = ((0,0,0), (255, 255, 255), (0, 204, 204), (204, 0, 102))
-    pointer_colors = ((0, 255, 255), (0,0,0))
-
-    with open(os.path.join(dir_name, 'best_score.txt'), 'r') as r:
-        try:
-            best_score = int(r.readline())
-        except:
-            best_score = -1
-    
-
-    while True:
-        changed = False
-        for event in pygame.event.get():
-            if event.type == QUIT:
-                pygame.display.quit()
-                pygame.quit()
-                exit()
-
-            if event.type == KEYDOWN:
-                if event.key == K_UP:
-                    changed = True
-                    direction = UP
-                if event.key == K_DOWN:
-                    changed = True
-                    direction = DOWN
-                if event.key == K_RETURN or event.key == K_KP_ENTER:
-                    enter = True
-        
-        screen.fill(colors[0])
-
-        if direction == UP:
-            current_play_color = colors[3]
-            current_quit_color = colors[1]
-            pointer_direction = (255, 183)
-            if enter:
-                screen.fill((51, 204, 51))
-                pygame.display.update()
-                make_game(best_score)
-                pygame.time.wait(7000)
-                break
-
-        elif direction == DOWN:
-            current_play_color = colors[1]
-            current_quit_color = colors[3]
-            pointer_direction = (255, 213)
-            if enter:
-                pygame.display.quit()
-                pygame.quit()
-                exit()
-                
-        pygame.draw.circle(screen, pointer_colors[i%2], pointer_direction, 4)
-
-        if i == 0: # TODO: verify the pattern to simplify this code
-            pass
-        elif i == 1:
-            font = switch_title(title_font, colors[i], (((600 // 2)-5)+10, 50))
-            font.print_font(screen)
-        elif i == 2:
-            font = switch_title(title_font, colors[i-1], (((600 // 2)-5)+10, 50))
-            font.print_font(screen)
-            font = switch_title(title_font, colors[i], ((600 // 2)- 5 + (i*10), 60 - (i*10)))
-            font.print_font(screen)
-        elif i == 3:
-            switch_title(title_font, colors[i-2], (((600 // 2)-5)+10, 50))
-            font.print_font(screen)
-            switch_title(title_font, colors[i-1], ((600 // 2)- 5 + ((i-1)*10), 60 - ((i-1)*10)))
-            font.print_font(screen)
-            switch_title(title_font, colors[i], ((600 // 2)- 5 + (i*10), 60 - (i*10)))
-            font.print_font(screen)
-            
-
-        alter_font_color(play_font, current_play_color)
-        play_font.print_font(screen)
-
-        alter_font_color(quit_font, current_quit_color)
-        quit_font.print_font(screen)
-
-        if not changed:
-            pygame.time.wait(300)
-            
-        pygame.display.update()
-
-        i = (i + 1) % 4
-        
-
-draw_menu()
+    game_over = Fonts("Game Over", "Pixeled", 50, (600 // 2, 20), (255, 26, 26))
+    game_over.print_font(screen)
+    pygame.display.update()
+    pygame.mixer.Sound.play(pygame.mixer.Sound("GameSounds/game-over.ogg"))
+    pygame.time.wait(2000)
+        # menu()
 
