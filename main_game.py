@@ -24,7 +24,6 @@ def play_game(best_score):
     apple = Apple()
 
     my_direction = LEFT
-    font = pygame.font.Font('freesansbold.ttf', 18)
     score = 0
     dead_line = False
 
@@ -37,16 +36,16 @@ def play_game(best_score):
                 exit()
 
             if event.type == KEYDOWN:
-                if (event.key == K_UP or event.key == K_KP8) and my_direction != DOWN:
+                if (event.key == K_UP or event.key == K_KP8 or event.key == K_e) and my_direction != DOWN:
                     my_direction = UP
                     break
-                elif (event.key == K_DOWN or event.key == K_KP2) and my_direction != UP:
+                elif (event.key == K_DOWN or event.key == K_KP2 or event.key == K_d) and my_direction != UP:
                     my_direction = DOWN
                     break
-                elif (event.key == K_LEFT or event.key == K_KP4) and my_direction != RIGHT:
+                elif (event.key == K_LEFT or event.key == K_KP4 or event.key == K_s) and my_direction != RIGHT:
                     my_direction = LEFT
                     break
-                elif (event.key == K_RIGHT or event.key == K_KP6) and my_direction != LEFT:
+                elif (event.key == K_RIGHT or event.key == K_KP6 or event.key == K_f) and my_direction != LEFT:
                     my_direction = RIGHT
                     break
 
@@ -66,19 +65,16 @@ def play_game(best_score):
             dead_line = True
 
         screen.fill((51, 204, 51))
-        screen.blit(apple.get_apple(), apple.get_apple_pos())
-        # pygame.draw.circle(screen, apple.get_color(), apple.get_apple_pos(), 5)  #TODO: apple circle
 
-        score_font = font.render(f'Score: {score}', True, (255, 255, 255))
-        score_rect = score_font.get_rect()
-        score_rect.topleft = (600 - 120, 10)
-        screen.blit(score_font, score_rect)
+        apple_pos = apple.get_apple_pos()
+        pygame.draw.circle(screen, apple.get_color(), (apple_pos[0]+5, apple_pos[1]+5), 5)
 
-        b_score_font = font.render(f'Best-Score: {best_score}', True, (255, 255, 255))
-        b_score_rect = b_score_font.get_rect()
-        b_score_rect.topleft = (40, 10)
-        screen.blit(b_score_font, b_score_rect)
+        score_font = Fonts('Score: {}'.format(score), 'freesansbold.ttf', 28, (600 - 110, 10))
+        score_font.print_font(screen)
 
+        b_score_font = Fonts('Best-Score: {}'.format(best_score), 'freesansbold.ttf', 28, (120, 10))
+        b_score_font.print_font(screen)
+        
         snake.print_snake(screen)
         
         if dead_line:
@@ -96,5 +92,4 @@ def play_game(best_score):
     pygame.display.update()
     pygame.mixer.Sound.play(pygame.mixer.Sound("GameSounds/game-over.ogg"))
     pygame.time.wait(2000)
-        # menu()
 

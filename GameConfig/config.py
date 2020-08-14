@@ -12,8 +12,8 @@ screen = pygame.display.set_mode((600,600))
 clock = pygame.time.Clock()
 
 
-def collision(c1, c2):
-    return (c1[0] == c2[0]) and (c1[1] == c2[1])
+def collision(p1, p2):
+    return (p1[0] == p2[0]) and (p1[1] == p2[1])
 
 
 def print_snake(screen, font_color, snake_font, i):
