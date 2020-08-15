@@ -69,10 +69,10 @@ def play_game(best_score):
         apple_pos = apple.get_apple_pos()
         pygame.draw.circle(screen, apple.get_color(), (apple_pos[0]+5, apple_pos[1]+5), 5)
 
-        score_font = Fonts('Score: {}'.format(score), 'freesansbold.ttf', 28, (600 - 110, 10))
+        score_font = Fonts('Score: {}'.format(score), 'freesansbold.ttf', 22, (600 - 110, 10))
         score_font.print_font(screen)
 
-        b_score_font = Fonts('Best-Score: {}'.format(best_score), 'freesansbold.ttf', 28, (120, 10))
+        b_score_font = Fonts('Best-Score: {}'.format(best_score), 'freesansbold.ttf', 22, (120, 10))
         b_score_font.print_font(screen)
         
         snake.print_snake(screen)
@@ -87,7 +87,7 @@ def play_game(best_score):
         pygame.display.update()
 
     
-    game_over = Fonts("Game Over", "Pixeled", 50, (600 // 2, 20), (255, 26, 26))
+    game_over = Fonts("Game Over", "Pixeled.ttf", 50, (600 // 2, 20), (255, 26, 26))
     game_over.print_font(screen)
     pygame.display.update()
     pygame.mixer.Sound.play(pygame.mixer.Sound("GameSounds/game-over.ogg"))

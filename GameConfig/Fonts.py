@@ -2,6 +2,9 @@ import pygame as pyg
 from pygame.locals import *
 from GameConfig.config import UP, DOWN
 
+import os
+dir_name = os.path.join(os.path.dirname(__file__))
+
 class Fonts():
 
     def __init__(self, text, style, size, pos, color=(255,255,255)):
@@ -38,7 +41,7 @@ class Fonts():
             raise ValueError("'colors' must be a tuple of integers")
 
     def set_type(self):
-        self._font_type = pyg.font.SysFont(self._style, self._size)
+        self._font_type = pyg.font.Font(os.path.join(dir_name, 'GameFonts', self._style.lower()), self._size)
     
     def set_render(self, antialias=True):
         self._font_render = self._font_type.render(self._text, antialias, self._color)

@@ -34,9 +34,9 @@ def menu():
     direction = UP
     enter = False
     
-    play_font = Fonts('PLAY', 'Pixeled', 15, ((600 // 2), 160))
-    quit_font = Fonts('QUIT', 'Pixeled', 15, ((600 // 2), 190))
-    title_font = Fonts('Snake Game', 'Pixeled', 30, (((600 // 2)-5)+10, 50))
+    play_font = Fonts('PLAY', 'Pixeled.ttf', 15, ((600 // 2), 160))
+    quit_font = Fonts('QUIT', 'Pixeled.ttf', 15, ((600 // 2), 190))
+    title_font = Fonts('Snake Game', 'Pixeled.ttf', 30, (((600 // 2)-5)+10, 50))
     i = 0
     
     colors = (((0,0,0), (255, 255, 255), (0, 204, 204), (204, 0, 102)), ((0, 255, 255), (0,0,0)))
