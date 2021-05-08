@@ -6,7 +6,6 @@ from ..constants.constants import (UP, DOWN, TYPE_ERROR_MESSAGE,
                                    FREE_SANS_BOLD_FONT, PIXELED_FONT)
 
 import os
-dir_name = os.path.join(os.path.dirname(__file__))
 
 class Fonts:
 
