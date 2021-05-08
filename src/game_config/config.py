@@ -1,19 +1,15 @@
-UP = 0
-RIGHT = 1
-DOWN = 2
-LEFT = 3
+
 
 import pygame
 import os
 from GameConfig.Fonts import Fonts
 
-screen = pygame.display.set_mode((600,600))
-
-clock = pygame.time.Clock()
 
 
-def collision(p1, p2):
-    return (p1[0] == p2[0]) and (p1[1] == p2[1])
+
+
+
+
 
 
 def print_snake(screen, font_color, snake_font, i):
@@ -24,10 +20,9 @@ def print_snake(screen, font_color, snake_font, i):
 
 
 def switch_title(font, color, pos=None):
-    font.set_color(color)
-    font.set_render()
-    
+    font.alter_font_color(color)
+
     if pos:
-        font.set_location(mid=pos[0], top=pos[1])
+        font.set_font_location_by_mid(mid=pos[0], top=pos[1])
 
     return font
