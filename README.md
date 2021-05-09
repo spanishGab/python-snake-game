@@ -7,7 +7,7 @@ This game was based on the code created by the user "filhoweuler", it's an adapt
 
 ## Imports
 
-The game imports the following modules:
+The game imports the following python modules:
 
 * pygame;
 * random;
@@ -23,10 +23,10 @@ The purpose of this project was first to add some missing functions that _filhow
 I also made some modifications in the game, such as:
 
 * Creation of the snake's speed, that increases when the size of the snake is a multiple of eight;
-* Correction of some bugs that were occurring originally, like when the UP and RIGHT keys (or something like that) were pressed together, the snake simply was dying;
+* Correction of some bugs that were occurring originally, like when the UP and RIGHT keys (or something like that) were pressed together, the snake just died;
 * Creation of a new interface to the game;
 * Creation of the score marking;
-* Creation of a score register (using a simple .txt file).
+* Creation of a best score register (using a simple .txt file).
 
 ## How to play 
 
