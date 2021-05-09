@@ -20,15 +20,12 @@ from .constants.constants import (UP, DOWN, LEFT, RIGHT, CLOCK,
 
 from.utils import utils
 
-pygame.init()
-pygame.mixer.pre_init(44100, -16, 2, 2)
-pygame.mixer.init()
 pygame.display.set_caption('Snake')
 
 
-SCORE_TEXT_POSITION = (600 - 110, 10)
+SCORE_TEXT_POSITION = (SCREEN_WIDTH - 110, 10)
 BEST_SCORE_TEXT_POSITION = (120, 10)
-GAME_OVER_TEXT_POSITION = (600 // 2, 20)
+GAME_OVER_TEXT_POSITION = (SCREEN_WIDTH // 2, 20)
 GAME_OVER_TEXT_COLOR = (255, 26, 26)
 
 

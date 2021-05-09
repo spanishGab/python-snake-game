@@ -1,6 +1,5 @@
 import os
 import pygame
-from pygame.locals import *
 from pygame.locals import QUIT, KEYDOWN, K_UP, K_DOWN, K_RETURN, K_KP_ENTER
 
 from collections import namedtuple
@@ -10,16 +9,16 @@ from src.entities.Font import Font
 
 
 
-from src.constants.constants import (UP, DOWN, LEFT, RIGHT, CLOCK,
-                                      GAME_SOUNDS_DIR, GAME_SCORE_DIR, BEST_SCORE_FILE,
-                                      HAPPY_CAVE_MUSIC_SOUND, CARROT_SOUND, GAME_OVER_SOUND,
-                                      ENTER_SOUND, INTRO_MUSIC_SOUND, SCREEN, SCREEN_HEIGHT, 
-                                      SCREEN_WIDTH, GARDEN_SCREEN_COLOR, FREE_SANS_BOLD_FONT, 
-                                      PIXELED_FONT)
+from src.constants.constants import (UP, DOWN, CLOCK, GAME_SOUNDS_DIR,
+                                     GAME_SCORE_DIR, BEST_SCORE_FILE, CARROT_SOUND, 
+                                     GAME_OVER_SOUND, ENTER_SOUND, INTRO_MUSIC_SOUND, 
+                                     SCREEN, SCREEN_HEIGHT, SCREEN_WIDTH, 
+                                     GARDEN_SCREEN_COLOR, FREE_SANS_BOLD_FONT, 
+                                     PIXELED_FONT)
 
-PLAY_FONT_POSITION = ((600 // 2), 160)
-QUIT_FONT_POSITION = ((600 // 2), 190)
-GAME_TITLE_FONT_POSITION = (((600 // 2)-5)+10, 50)
+PLAY_FONT_POSITION = ((SCREEN_WIDTH // 2), 160)
+QUIT_FONT_POSITION = ((SCREEN_WIDTH // 2), 190)
+GAME_TITLE_FONT_POSITION = ((SCREEN_WIDTH // 2) + 5, 50)
 
 BLACK_RGB = (0, 0, 0)
 WHITE_RGB = (255, 255, 255)
@@ -33,6 +32,10 @@ Colors = namedtuple("Colors", ['black',
                                'pink',
                                'aqua'
                                ])
+
+pygame.init()
+pygame.mixer.pre_init(44100, -16, 2, 2)
+pygame.mixer.init()
 
 
 def switch_title(font: Font, color: tuple, position=None):
@@ -49,15 +52,15 @@ def print_game_title(screen_frame, title_font, colors):
         None, 
         {
             'color': colors.white, 
-            'position':  (2960, 50)
+            'position': ((SCREEN_WIDTH // 2) + 5, 50)
         }, 
         {
             'color': colors.pool_blue, 
-            'position':  (2970, 580)
+            'position':  ((SCREEN_WIDTH // 2) + 15, 40)
         },
         {
             'color': colors.pink, 
-            'position':  (2980, 570)
+            'position':  ((SCREEN_WIDTH // 2) + 25, 30)
         },
     )
 
@@ -133,7 +136,7 @@ def menu():
             current_play_text_color = colors.pink
             current_quit_color = colors.white
             
-            pointer_position = (255, 183)
+            pointer_position = ((SCREEN_WIDTH // 2) - 45, 183)
             
             if enter:
                 pygame.mixer.music.stop()
@@ -157,7 +160,7 @@ def menu():
             current_play_text_color = colors.white
             current_quit_color = colors.pink
 
-            pointer_position = (255, 213)
+            pointer_position = ((SCREEN_WIDTH // 2) - 45, 213)
 
             if enter:
                 pygame.mixer.Sound.play(

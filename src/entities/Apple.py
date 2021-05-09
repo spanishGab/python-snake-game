@@ -83,8 +83,8 @@ class Apple():
             )
 
     def generate_new_random_apple_position(self):
-        x = random.randint(X_AXIS_MINIMUM_POSITION, SCREEN_WIDTH)
-        y = random.randint(Y_AXIS_MINIMUM_POSITION, SCREEN_HEIGHT)
+        x = random.randint(X_AXIS_MINIMUM_POSITION, SCREEN_WIDTH - 20)
+        y = random.randint(Y_AXIS_MINIMUM_POSITION, SCREEN_HEIGHT - 20)
 
         self.apple_position = (
             x // X_AXIS_MINIMUM_POSITION * X_AXIS_MINIMUM_POSITION,
