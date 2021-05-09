@@ -1,41 +1,92 @@
 import random
 import pygame as pyg
 
+from ..constants.constants import (TYPE_ERROR_MESSAGE, VALUE_ERROR_MESSAGE,
+                                   CONTENT_TYPE_ERROR_MESSAGE, SCREEN_WIDTH,
+                                   SCREEN_HEIGHT, TRAILING_NEW_LINE, TAB_CHARACTER)
+
+from ..utils import utils
+
+APPLE_POSITION_OUT_OF_BONDS = ("The apple position given is out of bonds, " +
+                               "valid values are:" + 
+                               TRAILING_NEW_LINE+TAB_CHARACTER +
+                               "- for x axis: {min_x} <= x <= {max_x}, " +
+                               "for y axis: {min_y} <= x <= {max_y}, got " +
+                               "x = {app_pos_x}, y = {app_pos_y}")
+
+X_AXIS_MINIMUM_POSITION = 10
+Y_AXIS_MINIMUM_POSITION = 10
+
+
 class Apple():
 
-    def __init__(self, dimensions=(10,10), apple_color=(255,0,0)):
-        self._set_apple(dimensions)
-        self.set_color(apple_color)
-        self.create()
-        
-    def get_apple(self):
-        return self._apple
-    
-    def get_apple_pos(self):
-        return self._apple_pos
-    
-    def get_color(self):
-        return self._color
+    def __init__(self, 
+                 dimensions: tuple=(X_AXIS_MINIMUM_POSITION,Y_AXIS_MINIMUM_POSITION),
+                 color: tuple = (255,0,0)):
+        self.dimensions = dimensions
+        self.color = color
+        self.generate_new_random_apple_position()
 
-    def _set_apple(self, dimensions):
-        if isinstance(dimensions[0], int) and isinstance(dimensions[1], int):
-            self._apple = pyg.Surface(dimensions)
+    @property
+    def dimensions(self):
+        return self.__dimensions
+
+    @dimensions.setter
+    def dimensions(self, dimensions: tuple):
+        if utils.are_valid_dimensions(dimensions):
+            self.__dimensions = pyg.Surface(dimensions)
         else:
-            raise ValueError("'colors' must be a tuple of integers")
-
-    def set_color(self, apple_color):
-        if isinstance(apple_color[0], int) and isinstance(apple_color[1], int) and isinstance(apple_color[2], int):
-            if ((apple_color[0] <= 255 and apple_color[0] >= 0) and 
-                (apple_color[1] <= 255 and apple_color[1] >= 0) and 
-                (apple_color[2] <= 255 and apple_color[2] >= 0)):
-                self._color = apple_color
-                self._apple.fill(apple_color)
+            raise ValueError(VALUE_ERROR_MESSAGE.format(
+                param='dimensions',
+                restr="'dimensions' must contain only integer elements")
+            )
+    
+    @property
+    def apple_position(self):
+        return self.__apple_position
+    
+    @apple_position.setter
+    def apple_position(self, apple_position: tuple):
+        if isinstance(apple_position, tuple):
+            if all(isinstance(pos, int) for pos in apple_position):
+                if (apple_position[0] >= X_AXIS_MINIMUM_POSITION and
+                    apple_position[0] <= SCREEN_WIDTH - 20 and
+                    apple_position[1] <= SCREEN_HEIGHT - 20 and
+                    apple_position[1] >= Y_AXIS_MINIMUM_POSITION):
+                        self.__apple_position = apple_position
+                else:
+                    raise ValueError(APPLE_POSITION_OUT_OF_BONDS.format(
+                        min_x=X_AXIS_MINIMUM_POSITION, max_x=SCREEN_WIDTH,
+                        min_y=Y_AXIS_MINIMUM_POSITION, max_y=SCREEN_HEIGHT,
+                        app_pos_x=apple_position[0],
+                        app_pos_y=apple_position[1])
+                    )
             else:
-                raise ValueError("'colors' must be a tuple of integers with the RGB pattern")
+                raise TypeError(CONTENT_TYPE_ERROR_MESSAGE.format(param='apple_position',
+                                                                  tp=int))
         else:
-            raise ValueError("'colors' must be a tuple of integers")
+            raise TypeError(TYPE_ERROR_MESSAGE.format(param='apple_position', tp=str,
+                                                      inst=type(apple_position)))
+    
+    @property
+    def color(self):
+        return self.__color
+    
+    @color.setter
+    def color(self, color: tuple):
+        if utils.is_valid_rgb_color(color):
+            self.__color = color
+        else:
+            raise ValueError(VALUE_ERROR_MESSAGE.format(
+                param='color',
+                restr='(0 <= x <= 255, 0 <= x <= 255, 0 <= x <= 255)')
+            )
 
-    def create(self):
-        x = random.randint(10,580)
-        y = random.randint(10,580)
-        self._apple_pos = (x // 10 * 10, y // 10 * 10)
+    def generate_new_random_apple_position(self):
+        x = random.randint(X_AXIS_MINIMUM_POSITION, SCREEN_WIDTH)
+        y = random.randint(Y_AXIS_MINIMUM_POSITION, SCREEN_HEIGHT)
+
+        self.apple_position = (
+            x // X_AXIS_MINIMUM_POSITION * X_AXIS_MINIMUM_POSITION,
+            y // Y_AXIS_MINIMUM_POSITION * Y_AXIS_MINIMUM_POSITION
+        )

@@ -2,7 +2,7 @@
 
 import pygame
 import os
-from GameConfig.Fonts import Fonts
+from  Font import Font
 
 
 
@@ -19,10 +19,3 @@ def print_snake(screen, font_color, snake_font, i):
     screen.blit(snake_font_screen, snake_font_area)
 
 
-def switch_title(font, color, pos=None):
-    font.alter_font_color(color)
-
-    if pos:
-        font.set_font_location_by_mid(mid=pos[0], top=pos[1])
-
-    return font

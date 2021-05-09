@@ -1,13 +1,13 @@
-import pygame as pyg
-from pygame.locals import *
-from ..constants.constants import (UP, DOWN, TYPE_ERROR_MESSAGE, 
-                                   CONTENT_TYPE_ERROR_MESSAGE, 
-                                   VALUE_ERROR_MESSAGE, SRC_DIR,
-                                   FREE_SANS_BOLD_FONT, PIXELED_FONT)
-
 import os
+import pygame as pyg
 
-class Fonts:
+from ..constants.constants import (UP, DOWN, TYPE_ERROR_MESSAGE, 
+                                   VALUE_ERROR_MESSAGE, GAME_FONTS_DIR,
+                                   FREE_SANS_BOLD_FONT, PIXELED_FONT)
+from ..utils import utils
+
+
+class Font:
 
     def __init__(self,
                  text: str,
@@ -53,7 +53,7 @@ class Fonts:
                     VALUE_ERROR_MESSAGE.format(
                         param='style', restr=("'style' must be equal to " +
                                               "'{0}' or '{1}'")
-                                             .format(FREE_SANS_BOLD_FONT,
+                                              .format(FREE_SANS_BOLD_FONT,
                                                      PIXELED_FONT)
                     )
                 )
@@ -70,7 +70,7 @@ class Fonts:
         if isinstance(size, int):
             self.__size = size
         else:
-            raise TypeError(TYPE_ERROR_MESSAGE.format(param='size', tp=str,
+            raise TypeError(TYPE_ERROR_MESSAGE.format(param='size', tp=int,
                                                       inst=type(size)))
     
     @property
@@ -79,19 +79,13 @@ class Fonts:
 
     @color.setter
     def color(self, color: tuple): 
-        if isinstance(color, tuple):
-            if all(isinstance(elem, int) for elem in color):
-                if all(elem <= 255 and elem >= 0 for elem in color):
-                    self.__color = color
-                else:
-                  raise ValueError(VALUE_ERROR_MESSAGE.format(param='color', 
-                                                              restr='elem <= 255 and elem >= 0'))  
-            else:
-                raise TypeError(CONTENT_TYPE_ERROR_MESSAGE.format(param='color',
-                                                                  tp=int))
+        if utils.is_valid_rgb_color(color):
+            self.__color = color
         else:
-            raise TypeError(TYPE_ERROR_MESSAGE.format(param='color', tp=str,
-                                                      inst=type(color)))
+            raise ValueError(VALUE_ERROR_MESSAGE.format(
+                param='color',
+                restr='(0 <= x <= 255, 0 <= x <= 255, 0 <= x <= 255)')
+            )
 
     @property
     def font_type(self):
@@ -99,7 +93,7 @@ class Fonts:
 
     def _set_font_type(self):
         self.__font_type = pyg.font.Font(
-            os.path.join(SRC_DIR, 'resources', 'game_fonts', self.__style),
+            os.path.join(GAME_FONTS_DIR, self.__style),
             self.__size
         )
     
