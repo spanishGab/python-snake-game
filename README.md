@@ -11,7 +11,8 @@ The game imports the following modules:
 
 * pygame;
 * random;
-* os.
+* os;
+* namedtuple
 
 ## Description
 

@@ -1,6 +1,7 @@
 import os
 import pygame
-from pygame.locals import QUIT, KEYDOWN, K_UP, K_DOWN, K_RETURN, K_KP_ENTER
+from pygame.locals import (QUIT, KEYDOWN, K_UP, K_DOWN, K_RETURN, K_KP_ENTER,
+                           K_KP8, K_KP2, K_e, K_d)
 
 from collections import namedtuple
 
@@ -121,10 +122,10 @@ def menu():
                 exit()
 
             if event.type == KEYDOWN:
-                if event.key == K_UP:
+                if (event.key == K_UP or event.key == K_KP8 or event.key == K_e):
                     changed = True
                     direction = UP
-                if event.key == K_DOWN:
+                if (event.key == K_DOWN or event.key == K_KP2 or event.key == K_d):
                     changed = True
                     direction = DOWN
                 if event.key == K_RETURN or event.key == K_KP_ENTER:
