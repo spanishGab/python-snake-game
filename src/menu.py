@@ -156,7 +156,7 @@ def menu():
                 SCREEN.fill(GARDEN_SCREEN_COLOR)
                 pygame.display.update()
 
-                play_game(best_score)
+                best_score = play_game(best_score)
 
                 enter = False
                 pygame.mixer.music.load(str(INTRO_MUSIC))

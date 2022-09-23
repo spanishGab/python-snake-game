@@ -23,6 +23,8 @@ def create_best_score_file() -> int:
     return best_score
 
 
-def update_best_score(score: int):
+def update_best_score(score: int) -> int:
     with GAME_SCORE_FILE.open(mode='w') as file:
         file.write(str(score))
+
+    return score

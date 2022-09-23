@@ -21,4 +21,6 @@ I also made some alterations in the game, such as:
 
 ## How to play
 
+To start the game just you will need to install a python3.9 version. Once you have it in hands, go to your terminal and run `pip install -r requirements.txt` and then `python run.py`.
+
 Use the four standard arrows (or the keypad arrowed numbers, or the s,e,d,f keys if you are left-handed) of your keyboard to move the snake in the desired direction.

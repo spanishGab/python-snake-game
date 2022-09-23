@@ -134,8 +134,8 @@ def play_game(best_score: int):
         snake.print_snake(SCREEN)
 
         if not snake.is_alive:
-            if score > best_score:
-                update_best_score(score)
+            if score > best_score or best_score == 0:
+                best_score = update_best_score(score)
 
             pygame.mixer.music.stop()
             break
@@ -153,3 +153,5 @@ def play_game(best_score: int):
     pygame.mixer.Sound.play(GAME_OVER_SOUND)
 
     pygame.time.wait(2000)
+
+    return best_score
