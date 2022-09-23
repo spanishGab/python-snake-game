@@ -1,13 +1,18 @@
 from pathlib import Path
 from .constants import RESOURCES_DIR
 
-GAME_SCORE_FILE = Path(RESOURCES_DIR, 'game_score', 'best_score.txt')
+GAME_SCORE_DIR = Path(RESOURCES_DIR, 'game_score')
+GAME_SCORE_FILE = GAME_SCORE_DIR.joinpath('best_score.txt')
 
 
 def create_best_score_file() -> int:
     best_score = 0
+
+    if not GAME_SCORE_DIR.exists():
+        GAME_SCORE_DIR.mkdir()
+
     if GAME_SCORE_FILE.exists():
-        with open(GAME_SCORE_FILE, mode='r') as file:
+        with GAME_SCORE_FILE.open(mode='r') as file:
             try:
                 best_score = int(file.readline())
             except ValueError:
@@ -19,5 +24,5 @@ def create_best_score_file() -> int:
 
 
 def update_best_score(score: int):
-    with open(GAME_SCORE_FILE, mode='w') as file:
+    with GAME_SCORE_FILE.open(mode='w') as file:
         file.write(str(score))

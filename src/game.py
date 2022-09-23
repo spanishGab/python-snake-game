@@ -127,7 +127,6 @@ def play_game(best_score: int):
         )
 
         score_font.alter_font_text(f'Score: {score}')
-        print(score)
         score_font.print_font(SCREEN)
 
         best_score_font.print_font(SCREEN)
