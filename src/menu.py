@@ -1,8 +1,6 @@
 import sys
 import pygame
-from pygame.locals import (
-    QUIT, KEYDOWN, K_UP, K_DOWN, K_RETURN, K_KP_ENTER, K_KP8, K_KP2, K_e, K_d
-)
+from pygame.locals import QUIT, KEYDOWN
 from collections import namedtuple
 from .game import play_game
 from .entities.Font import Font
@@ -11,6 +9,7 @@ from .constants import (
     GAME_SOUNDS_DIR, GAME_VOLUME
 )
 from .db import create_best_score_file
+from .utils.keyboard import should_go_up, should_go_down, enter_pressed
 
 Colors = namedtuple(
     "Colors",
@@ -121,23 +120,15 @@ def menu():
                 sys.exit()
 
             if event.type == KEYDOWN:
-                if (
-                    event.key == K_UP
-                    or event.key == K_KP8
-                    or event.key == K_e
-                ):
+                if should_go_up(event.key):
                     changed_pointer_position = True
                     direction = UP
 
-                if (
-                    event.key == K_DOWN
-                    or event.key == K_KP2
-                    or event.key == K_d
-                ):
+                if should_go_down(event.key):
                     changed_pointer_position = True
                     direction = DOWN
 
-                if event.key == K_RETURN or event.key == K_KP_ENTER:
+                if enter_pressed(event.key):
                     enter = True
 
         SCREEN.fill(MENU_COLORS.black)

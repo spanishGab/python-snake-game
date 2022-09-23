@@ -1,6 +1,6 @@
 from pygame.locals import (
     K_UP, K_DOWN, K_LEFT, K_RIGHT, K_KP8, K_KP2, K_KP4, K_KP6, K_e, K_d, K_s,
-    K_f
+    K_f, K_RETURN, K_KP_ENTER
 )
 
 
@@ -18,3 +18,6 @@ def should_go_left(event_key: int):
 
 def should_go_right(event_key: int):
     return event_key == K_RIGHT or event_key == K_KP6 or event_key == K_f
+
+def enter_pressed(event_key: int):
+    return event_key == K_RETURN or event_key == K_KP_ENTER
